@@ -1,0 +1,31 @@
+
+$cream: #F5F5DC;
+$primaryColor: #93c4f5;
+$secondaryColor: #dbdbdb;
+$textGrey: #c7c7c7;
+
+@mixin position($direction: row, $alignment: center)
+{
+    display: flex; 
+    flex-direction: $direction;
+    justify-content: $alignment;
+    
+}
+@keyframes bobbing{
+    0% {transform: translateY(0px)};
+    50% {transform: translateY(-20px)};
+    100% {transform: translateY(0px)};
+}
+
+.title{
+    @include position($direction: column);
+    margin-top: 20rem;
+    animation-name: bobbing;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.loginlink{
+    text-decoration: none;
+    color: black;
+}

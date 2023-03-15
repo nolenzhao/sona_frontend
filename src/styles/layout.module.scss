@@ -1,0 +1,32 @@
+
+$cream: #F5F5DC;
+$primaryColor: #93c4f5;
+$secondaryColor: #dbdbdb;
+$textGrey: #c7c7c7;
+
+@mixin position($direction: row, $alignment: center)
+{
+    display: flex; 
+    flex-direction: $direction;
+    justify-content: $alignment;
+    
+}
+
+
+
+.appbar{
+    .menu{
+        justify-content: space-around;
+        .title{
+            @include position;
+           
+        }
+        .listicon{
+            font-size: inherit
+        }
+    }
+   
+    
+    
+}
+
