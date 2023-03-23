@@ -40,11 +40,12 @@ interface Device{
 const Homepage:MyPage = () =>{
 
 
-  const [accesstoken, setAccesstoken] = useState<string | null>('');
+  const [accesstoken, setAccesstoken] = useState<string | null>('empty');
   const [device_id, set_device_id] = useState<string | null>('');
   const [device_data, set_device_data] = useState<Device[]>([]);
 
   useEffect(() =>{
+
      let param = new URLSearchParams(window.location.search);
      setAccesstoken(param.get('access_token'))
   },[])
@@ -83,7 +84,8 @@ const Homepage:MyPage = () =>{
         homepage 
 
         this is the acc {accesstoken}
-        <Playback accesstoken = {accesstoken}/> 
+        {accesstoken === "empty" ? <div> </div> : <Playback accesstoken = {accesstoken}/> }
+        
       </Box>
     
     </Container>
