@@ -20,6 +20,7 @@ $textGrey: #c7c7c7;
 .title{
     @include position($direction: column);
     margin-top: 20rem;
+    color: #1fa8d1;
     animation-name: bobbing;
     animation-duration: 2s;
     animation-iteration-count: infinite;
@@ -27,5 +28,5 @@ $textGrey: #c7c7c7;
 
 .loginlink{
     text-decoration: none;
-    color: black;
+    color: #1fa8d1;
 }

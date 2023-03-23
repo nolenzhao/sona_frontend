@@ -16,11 +16,7 @@ $textGrey: #c7c7c7;
 
 .appbar{
     .menu{
-        justify-content: space-around;
-        .title{
-            @include position;
-           
-        }
+        justify-content: space-between;
         .listicon{
             font-size: inherit
         }

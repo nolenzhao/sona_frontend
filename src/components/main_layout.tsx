@@ -6,24 +6,27 @@ import Person from '@mui/icons-material/Person'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import SearchIcon from '@mui/icons-material/Search'
+import { PropsOf } from '@emotion/react'
 
 interface Props{
-    children: any;
+    children: React.ReactNode;
 }
 
-const Layout:React.FC<Props> = ({children}) =>{
+const Main_Layout:React.FC<Props> = ({children}: Props) =>{
     return(
         <>
         <Container> 
+            
             <AppBar position='fixed' className = {styles.appbar} sx = {{
                 color: 'primary.main',
-                bgcolor: 'secondary.main',
+                bgcolor: 'white',
                 
             }}>
             <Toolbar className = {styles.menu} sx = {{
                 fontSize: 50
             }}>
-            <Menu sx = {{
+            <SearchIcon sx = {{
                 fontSize: 'inherit'
             }}/>
             <Typography variant = 'h1'> 
@@ -40,7 +43,7 @@ const Layout:React.FC<Props> = ({children}) =>{
         </Container>
         </>
         
-    )
+    );
 }
 
-export default Layout
+export default Main_Layout

@@ -37,6 +37,7 @@ const Profile = () =>{
         <div>
 
             this is the profile page
+            this is the access token {accesstoken}
         </div>
     )
 
