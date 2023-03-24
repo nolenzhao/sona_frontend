@@ -83,8 +83,8 @@ const Homepage:MyPage = () =>{
       <Box marginTop = '200px'>
         homepage 
 
-        this is the acc {accesstoken}
-        {accesstoken === "empty" ? <div> </div> : <Playback accesstoken = {accesstoken}/> }
+       
+        <Playback accesstoken = {accesstoken}/> 
         
       </Box>
     
