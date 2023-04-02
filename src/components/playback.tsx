@@ -64,10 +64,12 @@ interface WebPlaybackState{
 interface Player{ 
 
     nextTrack: () => Promise<void> | Promise<null>,
-    addListener: () => boolean,
+    addListener: (event_name:string, callback: (device_id:string) => void ) => boolean,
     previousTrack: () => Promise<void> | Promise<null>,
     togglePlay: () => Promise<void> | Promise<null>,
     getCurrentState: () => Promise<void> | Promise<WebPlaybackState> | Promise<null>,
+    getVolume: () => Promise<number>,
+    connect: () => Promise<void> | Promise<null>
 }
 
 
@@ -89,37 +91,48 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
         ]
     }
   
-    const [player, setPlayer] = useState<Player>({
+    const [player, setPlayer] = useState<Player>(
+        {
         nextTrack: function() {return Promise.resolve()},
         addListener: function() { return true},
         previousTrack: function() {return Promise.resolve()},
         togglePlay: function() {return Promise.resolve()},
-        getCurrentState: function() {return Promise.resolve()}
-    });
+        getCurrentState: function() {return Promise.resolve()},
+        getVolume: function() { return Promise.resolve(0)},
+        connect: function() { return Promise.resolve()}
+    }
+    );
 
     const [is_paused, setPaused] = useState<Boolean>(false);
     const [is_active, setActive] = useState<Boolean>(false);
     const [current_track, setTrack] = useState<Track>(track);
-    // useEffect(() =>{
-    //     let param = new URLSearchParams(window.location.search);
-    //     set_access_token(param.get('access_token'))
-    // },[])
+    
+    useEffect(() =>{
+       
+        setTimeout(() =>{
+            const script = document.createElement("script");
+            const token = accesstoken;
+            script.src = "https://sdk.scdn.co/spotify-player.js";
+            script.async = true;
+            document.body.appendChild(script);
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const player = new window.Spotify.Player({
+                    name: 'Sona SDK',
+                    getOAuthToken: (cb:any) => { cb(token); },
+                    volume: 0.5
+                });
+    
+                setPlayer(player);
+                console.log(`player was just set with ${accesstoken}`)       
+            }
+        }, 500)
+       
+    }, [accesstoken])
 
-    useEffect(() => {
-    const script = document.createElement("script");
-    const token = accesstoken;
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            const player= new window.Spotify.Player({
-                name: 'Web Playback SDK',
-                getOAuthToken: (cb:any) => { cb(token); },
-                volume: 0.5
-            });
+    
 
-            setPlayer(player);
-
+    useEffect(() =>{
+        setTimeout(() => {
             player.addListener('ready', ({device_id}:any) => {
                 console.log('Ready with Device ID', device_id);
             });
@@ -139,15 +152,63 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
                 player.getCurrentState().then( (state:any) => { 
                     (!state)? setActive(false) : setActive(true) 
                 });
-            })
-            )
-            player.connect();
+            }))   
             
-        };
-    }, [accesstoken]);
+            player.connect().then((success:any) =>{
+                if(success){
+                    console.log('Web SDK connected successfully')
+                }
+            });
+        }, 500)  
+    }, [player])
 
-   
+/*
+    const spotConnect = () =>{
+        console.log(`play has been set with acc ${accesstoken}`)
+        const script = document.createElement("script");
+        const token = accesstoken;
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+        document.body.appendChild(script);
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const player = new window.Spotify.Player({
+                name: 'Sona SDK',
+                getOAuthToken: (cb:any) => { cb(token); },
+                volume: 0.5
+            });
+
+            setPlayer(player);
+         
+            player.addListener('ready', ({device_id}:any) => {
+                console.log('Ready with Device ID', device_id);
+            });
     
+            player.addListener('not_ready', ({ device_id }:any) => {
+                console.log('Device ID has gone offline', device_id);
+            });
+         
+            player.addListener('player_state_changed', ((state:any) =>{
+                if(!state){
+                    return;
+                }
+                setTrack(state.track_window.current_track);
+                setPaused(state.paused);
+                
+                console.log(state.track_window.current_track);
+                player.getCurrentState().then( (state:any) => { 
+                    (!state)? setActive(false) : setActive(true) 
+                });
+            }))   
+            
+            player.connect().then((success:any) =>{
+                if(success){
+                    console.log('Web SDK connected successfully')
+                }
+            });     
+        }
+    }
+
+    */
     return(
         <Container>
             playback 
@@ -156,7 +217,7 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
                     <img src = {current_track.album.images[0].url}/>
                 </Box>
                 <ButtonGroup>
-                   
+               
                 <Button onClick={() => {player.previousTrack()}}><SkipPreviousIcon/> </Button>
                 <Button onClick = {() => {player.togglePlay()}}> { is_paused ? <PlayArrowIcon/> : <PauseIcon/>}
                 </Button>
@@ -164,6 +225,7 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
                     
                    
                 </ButtonGroup>
+
 
                 <h2> now playing {current_track.name} </h2>
                 

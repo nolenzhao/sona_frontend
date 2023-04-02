@@ -5,7 +5,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Box from '@mui/material/Box'
 import styles from '../styles/index.module.scss'
 import Typography from '@mui/material/Typography'
-import { MyPage } from '../types/types'
+import { MyPage } from '../types/types.d'
 
 
 /*
