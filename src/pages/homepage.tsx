@@ -43,7 +43,6 @@ interface Device{
 
 const Homepage:MyPage = () =>{
 
-
   const [accesstoken, setAccesstoken] = useState<string | null>('empty');
   const [device_id, set_device_id] = useState<string | null>('');
   const [device_data, set_device_data] = useState<Device[]>([]);
@@ -104,17 +103,17 @@ const Homepage:MyPage = () =>{
 
   return(
     <Container>
-      
+        <Box marginTop = '200px'>
 
-      <Box marginTop = '200px'>
+  <Grid>
 
-      <Grid>
+  </Grid>
+ 
+  <Playback accesstoken = {accesstoken}/>
+  
+  </Box>
 
-      </Grid>
-       
-       <Playback accesstoken = {accesstoken}/>
-        
-      </Box>
+    
     
     </Container>
   )

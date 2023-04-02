@@ -38,7 +38,7 @@ const Main_Layout:React.FC<Props> = ({children}: Props) =>{
             </Toolbar>
             </AppBar>
             <main>
-                {children}
+            {children}
             </main>
         </Container>
         </>
