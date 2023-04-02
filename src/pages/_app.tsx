@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
 import type { ReactElement, ReactNode } from 'react';
-import { MyAppProps } from '../types/types';
+import { MyAppProps } from '../types/types.d';
 import { Layouts } from '../components/layouts';
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
