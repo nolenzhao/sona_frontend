@@ -14,6 +14,8 @@ import Playback from '../components/playback'
 import Grid from '@mui/material/Unstable_Grid2'
 import {Album} from '../types/top_items.d'
 import { DataArray } from '@mui/icons-material';
+import Top_Items from '../components/top_items'
+import Custom_Playlist from '../components/custom_playlist';
 /*
 const Page: NextPageWithLayout = () => {
   return <p>hello world</p>
@@ -52,7 +54,7 @@ const Homepage:MyPage = () =>{
      let param = new URLSearchParams(window.location.search);
      setAccesstoken(param.get('access_token'))
   },[])
-
+/*
   useEffect(() =>{
 
 
@@ -72,22 +74,7 @@ const Homepage:MyPage = () =>{
   
   }, [accesstoken])
 
-  useEffect(() =>{
-    fetch('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5',{
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Authorization': `Bearer ${accesstoken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(raw => raw.json())
-    .then(data => {
-      set_top_items(data.items)
-    })
-  })
-
-
+*/
 
   useEffect(() =>{ 
     if(device_data !== undefined)
@@ -103,15 +90,17 @@ const Homepage:MyPage = () =>{
 
   return(
     <Container>
-        <Box marginTop = '200px'>
+        <Box marginTop = '125px'>
 
-  <Grid>
-
-  </Grid>
+        <Custom_Playlist accesstoken = {accesstoken}/>
  
-  <Playback accesstoken = {accesstoken}/>
   
-  </Box>
+  
+         </Box>
+
+  
+
+
 
     
     

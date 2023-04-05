@@ -1,0 +1,14 @@
+
+
+
+.accordion{
+    border: 5px red;
+}
+
+.genre_seeds{
+    margin: 5px 10px;
+    display: inline-block;
+    &:hover{
+        color: #1fa8d1;
+    }
+}

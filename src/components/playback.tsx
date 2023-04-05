@@ -162,7 +162,7 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
         }, 500)  
     }, [player])
 
-/*
+
     const spotConnect = () =>{
         console.log(`play has been set with acc ${accesstoken}`)
         const script = document.createElement("script");
@@ -208,7 +208,7 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
         }
     }
 
-    */
+    
     return(
         <Container>
             playback 
@@ -217,7 +217,8 @@ const Playback:React.FC<Props> = ({accesstoken}:Props) =>{
                     <img src = {current_track.album.images[0].url}/>
                 </Box>
                 <ButtonGroup>
-               
+
+                <Button onClick={() => {spotConnect()}}> connect </Button>
                 <Button onClick={() => {player.previousTrack()}}><SkipPreviousIcon/> </Button>
                 <Button onClick = {() => {player.togglePlay()}}> { is_paused ? <PlayArrowIcon/> : <PauseIcon/>}
                 </Button>
