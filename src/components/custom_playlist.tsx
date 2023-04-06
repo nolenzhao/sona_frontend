@@ -9,6 +9,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import Slider from '@mui/material/Slider';
 import { border, MUIStyledCommonProps } from '@mui/system'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography'
@@ -18,6 +19,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box'
 import styles from '../styles/custom_playlist.module.scss'
+import Quality_Slider from './quality_slider'
 
 interface Props{
     accesstoken: string | null;
@@ -27,13 +29,19 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
 
     
     const [user_seed_type, set_user_seed_type] = useState<string[]>(['', '', '', '', '']);
-    const [user_seed, set_user_seed] = useState<string[]>([])
+    const [user_seed, set_user_seed] = useState<string[]>(['', '', '', '', ''])
 
     const change_seed_type = (e:any, index:number) =>{
         let temp_arr = [...user_seed_type] 
         temp_arr.splice(index, 1, e.target.value)
         set_user_seed_type(temp_arr);
         console.log(user_seed_type);
+    }
+    const change_seed = (e:any, index:number) =>{
+        let temp_arr = [...user_seed];
+        temp_arr.splice(index, 1, e.target.value)
+        set_user_seed(temp_arr);
+        console.log(user_seed);
     }
     let seed_inputs = [];
     let picked = 2;
@@ -59,7 +67,9 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <MenuItem value='Genre'>Genre</MenuItem>
             </Select>
             </FormControl>
-            <TextField required = {user_seed_type[i] !== ''} defaultValue = '' disabled = {user_seed_type[i] === ''} label = {temp_label} variant='outlined' sx = {{width: 400, display: 'inline-block', marginLeft: 15}}/>
+            <TextField value = {user_seed[i]} onChange = {(e) => change_seed(e, i)} required = {user_seed_type[i] !== ''}
+             error = {user_seed_type[i] !== '' && user_seed[i] === ''} defaultValue = '' disabled = {user_seed_type[i] === ''} label = {temp_label} variant='outlined'
+              sx = {{width: 400, display: 'inline-block', marginLeft: 15}}/>
             </div>
            
 
@@ -135,6 +145,9 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                   {seed_inputs}
                 
                 </Box>
+
+                <Quality_Slider quality = 'Acousticness'/> 
+                
               
            
 
