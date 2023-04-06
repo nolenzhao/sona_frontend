@@ -115,7 +115,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                     Pick up to five seeds which will influence your playlist. These can be a mix of genres, artists, or tracks.
                 </Typography>
                 <Box marginTop = {5}>
-                <Accordion disableGutters = {true} sx = {{border: 3, borderColor: '#737373', }}>
+                <Accordion disableGutters = {true} sx = {{border: 3, borderColor: '#939393', }}>
                     <AccordionSummary expandIcon = {<ExpandMoreIcon/>}>
                         <Typography variant = 'h1' fontSize = {30} color = 'primary.main'>
                             Available Genres
@@ -146,11 +146,17 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                 </Box>
 
-                <Quality_Slider quality = 'Acousticness'/> 
-                
-              
-           
-
+                <Quality_Slider quality = 'Acousticness' start = {0} end = {100}  separation = {10}/> 
+                <Quality_Slider quality = 'Danceabilitiy' start = {0} end = {100}  separation = {10}/>
+                <Quality_Slider quality = 'Energy' start = {0} end = {100}  separation = {10}/>
+                <Quality_Slider quality = 'Instrumentalness' start = {0} end = {100}  separation = {10}/>
+                <Quality_Slider quality = 'Liveness' start = {0} end = {100} separation = {10}/>
+                <Quality_Slider quality = "Loudness (dB)" start = {-60} end = {0}  separation = {5}/>
+                <Quality_Slider quality = 'Popularity' start = {0} end = {100} separation = {10}/>
+                <Quality_Slider quality = 'Speechiness' start = {0} end = {100}  separation = {10}/>
+                <Quality_Slider quality = 'Tempo (BPM)' start = {0} end = {250} separation = {10}/>
+                <Quality_Slider quality = 'Time Signature' start = {0} end = {11} separation = {1}/>
+                <Quality_Slider quality = 'Valence' start = {0} end = {100} separation = {10}/> 
             </Box>
 
          
