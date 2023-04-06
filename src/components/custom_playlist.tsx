@@ -146,17 +146,50 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                 </Box>
 
-                <Quality_Slider quality = 'Acousticness' start = {0} end = {100}  separation = {10}/> 
-                <Quality_Slider quality = 'Danceabilitiy' start = {0} end = {100}  separation = {10}/>
-                <Quality_Slider quality = 'Energy' start = {0} end = {100}  separation = {10}/>
-                <Quality_Slider quality = 'Instrumentalness' start = {0} end = {100}  separation = {10}/>
-                <Quality_Slider quality = 'Liveness' start = {0} end = {100} separation = {10}/>
-                <Quality_Slider quality = "Loudness (dB)" start = {-60} end = {0}  separation = {5}/>
-                <Quality_Slider quality = 'Popularity' start = {0} end = {100} separation = {10}/>
-                <Quality_Slider quality = 'Speechiness' start = {0} end = {100}  separation = {10}/>
-                <Quality_Slider quality = 'Tempo (BPM)' start = {0} end = {250} separation = {10}/>
-                <Quality_Slider quality = 'Time Signature' start = {0} end = {11} separation = {1}/>
-                <Quality_Slider quality = 'Valence' start = {0} end = {100} separation = {10}/> 
+                <Quality_Slider quality = 'Acousticness' start = {0} end = {100}  separation = {10}
+                description = 'The acoustic nature of the track. Zero is mostly electronic and synthesized,
+                 one hundred is mostly acoustic components.'
+                /> 
+                <Quality_Slider quality = 'Danceabilitiy' start = {0} end = {100}  separation = {10}
+                description = 'How suitable a track is for dancing, calculated using tempo, rhythm stability, beath strength, 
+                and overall regularity. Zero is not suitable, one hundred is suitable.'
+                />
+                <Quality_Slider quality = 'Energy' start = {0} end = {100}  separation = {10}
+                description = 'The intensity and activity level of the track, calculated using loudness, dynamic range, 
+                and tempo. Zero is quiet and calm, one hundred is loud and energetic.'
+                />
+                <Quality_Slider quality = 'Instrumentalness' start = {0} end = {100}  separation = {10}
+                description = 'The degree to which vocals or singing is present, calculated using presence or absence of vocals, 
+                melodic content, and lyrics. Zero is full of singing, one hundred is mostly instruments.'
+                />
+                <Quality_Slider quality = 'Liveness' start = {0} end = {100} separation = {10}
+                description = 'The presence of a live audience in a recording, calculated using crowd noise, applauce, 
+                and other indicators. Zero is a studio, one hundred is live.'
+                />
+                <Quality_Slider quality = "Loudness (dB)" start = {-60} end = {0}  separation = {5}
+                description = 'Uses decibels to measure the loudness of a track. Negative sixty is silent, 
+                zero is deafening.'
+                />
+                <Quality_Slider quality = 'Popularity' start = {0} end = {100} separation = {10}
+                description = 'How popular a track is, calculated based on total number of plays and how recent those plays are. 
+                Takes into account user behavior and demographics. Zero is never played, one hundred is very popular.'
+                />
+                <Quality_Slider quality = 'Speechiness' start = {0} end = {100}  separation = {10}
+                description = 'The presence of spoken words, calculated by analyzing the high-frequency content and spectral
+                values of the track. Zero is mostly music, one hundred is mostly speaking.'
+                />
+                <Quality_Slider quality = 'Tempo (BPM)' start = {0} end = {250} separation = {10}
+                description = 'How many beats per minute (BPM) the track has. A higher tempo is faster, a lower tempo is 
+                slower, calculated using the time between beats. Zero is a snails pace, one hundred is racing.'
+                />
+                <Quality_Slider quality = 'Time Signature' start = {0} end = {11} separation = {1}
+                description = 'The number of beats per bar of a track, as well as the types (ie. eighth, quarter, whole). One is 
+                one beat per bar, eleven will have eleven beats per bar.'
+                />
+                <Quality_Slider quality = 'Valence' start = {0} end = {100} separation = {10}
+                description = 'How positive a track is, calculated by harmoniousness, tonality, and brightness. A value of zero 
+                is sad and angry, a value of one hundred is euphoric and cheerful.'
+                /> 
             </Box>
 
          

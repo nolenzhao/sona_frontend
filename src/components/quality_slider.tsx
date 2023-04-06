@@ -9,10 +9,11 @@ interface Props{
     start: number;
     end: number;
     separation: number;
+    description : string;
 }
 
 
-const Quality_Slider:React.FC<Props> = ({quality, start, end, separation}:Props) =>{
+const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, description}:Props) =>{
 
     const [value, setValue] = useState<number[]>([start, end]);
 
@@ -42,7 +43,7 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation}:Props)
        
             <Box  width = {500} marginTop = {10}>
                 <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em>{quality}</em>  </Typography>
-                <Typography variant = 'subtitle1'> hihi</Typography>
+                <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> {description} </Typography>
                 <Box width = {700} display = 'flex' flexDirection = 'row' justifyContent = 'space-between'>
                 <Box  width = {400} height ={100} display = 'flex' flexDirection='column' justifyContent='space-between' marginTop = {4}>
                 <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Range </Typography>
