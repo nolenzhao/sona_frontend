@@ -190,6 +190,76 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 description = 'How positive a track is, calculated by harmoniousness, tonality, and brightness. A value of zero 
                 is sad and angry, a value of one hundred is euphoric and cheerful.'
                 /> 
+                 <Box  width = {500} marginTop = {10}>
+                <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Mode </em>  </Typography>
+                <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> Whether the song is in major
+                or minor key. Options to choose either one, or both. </Typography>
+                <Box width = {700} display = 'flex' flexDirection = 'row' justifyContent = 'space-between'>
+                <Box  width = {400} height ={100} display = 'flex' flexDirection='column' justifyContent='space-between' marginTop = {4}>
+                <FormGroup>
+                    <FormControlLabel control = {<Checkbox/>} label = 'Both'/>
+                    <FormControlLabel control = {<Checkbox/>} label = 'Major'/>
+                    <FormControlLabel control = {<Checkbox/>} label = 'Minor'/>
+                </FormGroup>        
+                </Box>
+                
+                </Box>
+
+                
+                </Box>
+                <Box  width = {900} marginTop = {10}>
+                <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Duration</em>  </Typography>
+                <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> How long a track is. </Typography>
+                <Box width = {1100} display = 'flex' flexDirection = 'row' justifyContent = 'space-between' marginTop = {3}>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Minimum  </Typography>
+                <Box  width = {300}display = 'flex' flexDirection = 'row'>
+                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
+                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                </Box>
+                </Box>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Maximum  </Typography>
+                <Box  width = {300}display = 'flex' flexDirection = 'row'>
+                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
+                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                </Box>
+                </Box>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Target  </Typography>  
+                <Box  width = {300}display = 'flex' flexDirection = 'row'>
+                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
+                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                </Box> 
+                </Box>
+                </Box>
+                </Box>
+
+
+                <Box  width = {900} marginTop = {10}>
+                <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Key</em>  </Typography>
+                <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> The key of the track. 
+                Ranges from zero to eleven, where zero represents C, one is C#, two is D... eleven is B. </Typography>
+                <Box width = {900} display = 'flex' flexDirection = 'row' justifyContent = 'space-between' marginTop = {3}>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Minimum  </Typography>
+        
+                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+               
+                </Box>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Maximum  </Typography>
+                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+                </Box>
+                <Box display= 'flex' flexDirection = 'column'>
+                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Target  </Typography>  
+                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+                </Box>
+                </Box>
+                </Box>
+
+
+                
             </Box>
 
          
