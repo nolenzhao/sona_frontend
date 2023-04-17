@@ -11,6 +11,7 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Slider from '@mui/material/Slider';
 import { border, MUIStyledCommonProps } from '@mui/system'
+import { RecommendationsSeedObject, RecommendationsObject, RecommendationTrackObject} from 'spotify-api'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField';
@@ -18,8 +19,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import styles from '../styles/custom_playlist.module.scss'
 import Quality_Slider from './quality_slider'
+import { ElectricScooterSharp } from '@mui/icons-material'
 
 interface Props{
     accesstoken: string | null;
@@ -30,7 +33,27 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     
     const [user_seed_type, set_user_seed_type] = useState<string[]>(['', '', '', '', '']);
     const [user_seed, set_user_seed] = useState<string[]>(['', '', '', '', ''])
+    const [mode, setMode] = useState<string>('');
+    const [secondDuration, setSecondDuration] = useState<number[]>([0,0,0])
+    const [minuteDuration, setMinuteDuration] = useState<number[]>([-1,-1,-1]);
+    const [key, setKey] = useState<number[]>([-1,-1,-1]);
+    const [recObject, setRecObject] = useState<RecommendationsObject>()
+    const [recSeeds, setRecSeeds] = useState<RecommendationsSeedObject>()
+    const [recTracks, setRecTracks] = useState<RecommendationTrackObject>()
+    const [acousticness, setAcousticness] = useState<number[]>();
+    const [danceability, setDanceability] = useState<number[]>();
+    const [energy, setEnergy] = useState<number[]>();
+    const [instrumentalness, setInstrumentalness] = useState<number[]>();
+    const [loudness, setLoudness] = useState<number[]>();
+    const [liveness, setLiveness] = useState<number[]>();
+    const [popularity, setPopularity] =  useState<number[]>();
+    const [speechiness, setSpeechiness] = useState<number[]>();
+    const [tempo, setTempo] = useState<number[]>();
+    const [timeSignature, setTimeSignature] = useState<number[]>();
+    const [valence, setValence] = useState<number[]>();
 
+
+    
     const change_seed_type = (e:any, index:number) =>{
         let temp_arr = [...user_seed_type] 
         temp_arr.splice(index, 1, e.target.value)
@@ -44,7 +67,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         console.log(user_seed);
     }
     let seed_inputs = [];
-    let picked = 2;
+
     for(let i = 0; i < 5; i++)
     {
         let temp_label = `Seed ${i + 1}`
@@ -97,16 +120,153 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     function capitalizeFirstLetter(string:string){
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-/*
-    const seed_type_choice = (e:any) => {
-        let temp_arr = user_seed_type;
-        console.log(e.target.id)
-        temp_arr.splice(parseInt(e.target.id), 1, e.target.value)
-        console.log(temp_arr);
-        set_user_seed_type(temp_arr);
-        console.log(`this is the state ${user_seed_type}`);
+
+    const changeMode = (e:any) =>{
+        if(e.target.checked)
+        {
+            setMode(e.target.value)
+        }
+        else{
+            setMode('');
+        }
     }
-    */
+
+    const toMilliseconds = (value:number, time:string) =>{
+        if(time === 'seconds'){
+            return value * 1000
+        }
+        else{
+            return value * 60 * 1000
+        }
+        
+    }
+    const rangeDuration = (e:any) =>{
+        let {name} = e.target;
+        if(name === 'minimumminutes'){
+            let min = toMilliseconds(e.target.value, 'minutes')
+            let temp_arr = minuteDuration;
+            temp_arr[0] = min;
+            console.log(`this is the first temp_arr ${temp_arr}`)
+            setMinuteDuration(temp_arr);
+
+        }
+        else if(name === 'minimumseconds'){
+            let min = toMilliseconds(e.target.value, 'seconds');
+            let temp_arr = secondDuration;
+            temp_arr[0] = min;
+            setSecondDuration(temp_arr);
+        }
+        else if(name === 'maximumminutes')
+        {
+            let max = toMilliseconds(e.target.value, 'minutes')
+            let temp_arr = minuteDuration;
+            temp_arr[1]  = max;
+            console.log(`this is the seond temp_arr ${temp_arr}`)
+            setMinuteDuration(temp_arr);
+        }
+        else if(name === 'maximumseconds'){
+            let max = toMilliseconds(e.target.value, 'seconds')
+            let temp_arr = secondDuration;
+            temp_arr[1] = max;
+            setSecondDuration(temp_arr);
+
+        }
+        else if(name === 'targetminutes'){
+            let target = toMilliseconds(e.target.value, 'minutes');
+            let temp_arr = minuteDuration;
+            temp_arr[2] = target;
+            setMinuteDuration(temp_arr);
+        }
+        else{
+            let target = toMilliseconds(e.target.value, 'seconds')
+            let temp_arr = secondDuration;
+            temp_arr[2] = target;
+            setSecondDuration(temp_arr);
+        }
+       
+    }
+
+   const keyChange = (e: any) =>{
+       let {name} = e.target;
+       console.log(`this is the name ${name}`);
+       let temp_arr = [...key];
+       console.log(`this is the arr before ${temp_arr}`)
+        if(name === 'minimum')
+        { 
+            temp_arr[0] = e.target.value;
+        }
+        else if(name === 'maximum')
+        {
+            temp_arr[1] = e.target.value;
+            console.log('max changed')
+        }
+        else{
+            temp_arr[2] = e.target.value;
+        }
+        setKey(temp_arr);
+        console.log(`this is the arr after ${temp_arr}`)
+        console.log(`this is the key ${key}`)
+   }
+
+   
+
+   
+   const getTracks = () =>{
+
+       fetch('https://api.spotify.com/v1/recommendations' , {
+           method: 'GET',
+           mode: 'cors',
+           headers: {
+               'Content-Type': 'application/json',
+               'Authorization': `Bearer ${accesstoken}`
+           }
+
+       })
+       .then(raw => raw.json())
+       .then(data => {
+            setRecObject(data);
+            setRecSeeds(data.seeds)
+            setRecTracks(data.tracks);
+       })
+   }
+
+   const isKeyFaulty = (min:number, max:number, target:number) =>{
+        if(min < max){
+            if(target > max || target < min)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(min > max){
+            if(target < min && target > max)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            if(target !== min || target !== max)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+       
+   }
+
+   const slider_callback = (childData) =>{
+
+   }
+   
+
+
     return(
         <Container>
 
@@ -197,9 +357,9 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <Box width = {700} display = 'flex' flexDirection = 'row' justifyContent = 'space-between'>
                 <Box  width = {400} height ={100} display = 'flex' flexDirection='column' justifyContent='space-between' marginTop = {4}>
                 <FormGroup>
-                    <FormControlLabel control = {<Checkbox/>} label = 'Both'/>
-                    <FormControlLabel control = {<Checkbox/>} label = 'Major'/>
-                    <FormControlLabel control = {<Checkbox/>} label = 'Minor'/>
+                    <FormControlLabel control = {<Checkbox value = 'Both' onChange = {changeMode} disabled = {mode === 'Major' || mode === 'Minor' }/>} label = 'Both'/>
+                    <FormControlLabel control = {<Checkbox value = 'Major' onChange = {changeMode} disabled = {mode === 'Both' || mode === 'Minor'}/>} label = 'Major'/>
+                    <FormControlLabel control = {<Checkbox value = 'Minor'  onChange = {changeMode} disabled = {mode === 'Both' || mode === 'Major'}/>} label = 'Minor'/>
                 </FormGroup>        
                 </Box>
                 
@@ -214,57 +374,120 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <Box display= 'flex' flexDirection = 'column'>
                 <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Minimum  </Typography>
                 <Box  width = {300}display = 'flex' flexDirection = 'row'>
-                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
-                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                <TextField onChange = {rangeDuration} name = 'minimumminutes'  label = 'Minutes' variant = 'standard' type = 'number'/>
+                <TextField  onChange = {rangeDuration} name = 'minimumseconds' sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
                 </Box>
                 </Box>
                 <Box display= 'flex' flexDirection = 'column'>
                 <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Maximum  </Typography>
                 <Box  width = {300}display = 'flex' flexDirection = 'row'>
-                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
-                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                <TextField  label = 'Minutes' onChange = {rangeDuration} name = 'maximumminutes' variant = 'standard' type = 'number'/>
+                <TextField sx = {{ marginLeft: 5}} onChange = {rangeDuration} name = 'maximumseconds' label = 'Seconds' variant = 'standard' type = 'number'/>     
                 </Box>
                 </Box>
                 <Box display= 'flex' flexDirection = 'column'>
                 <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Target  </Typography>  
                 <Box  width = {300}display = 'flex' flexDirection = 'row'>
-                <TextField  label = 'Minutes' variant = 'standard' type = 'number'/>
-                <TextField sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
+                <TextField onChange = {rangeDuration} name = 'targetminutes' label = 'Minutes' variant = 'standard' type = 'number'/>
+                <TextField onChange = {rangeDuration} name = 'taretseconds' sx = {{ marginLeft: 5}} label = 'Seconds' variant = 'standard' type = 'number'/>     
                 </Box> 
                 </Box>
                 </Box>
                 </Box>
 
 
-                <Box  width = {900} marginTop = {10}>
+                <Box  width = {1000} marginTop = {10}>
                 <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Key</em>  </Typography>
                 <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> The key of the track. 
-                Ranges from zero to eleven, where zero represents C, one is C#, two is D... eleven is B. </Typography>
+                Chords or notes detected in the song, instert a single key for each box. Value range from C, C#, D... to B. </Typography>
                 <Box width = {900} display = 'flex' flexDirection = 'row' justifyContent = 'space-between' marginTop = {3}>
                 <Box display= 'flex' flexDirection = 'column'>
-                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Minimum  </Typography>
+                <Typography width = {80} fontSize = {25} variant = 'h1' color = 'primary.main'> Minimum  </Typography>
         
-                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+                <Box  marginTop = {2}>
+                <FormControl fullWidth>
+                <InputLabel> Key </InputLabel>
+                    <Select onChange = {keyChange} value = {key[0] === -1 ? '' : key[0]} name = 'minimum' label = 'Key'>
+                        <MenuItem value = {0}> C</MenuItem>
+                        <MenuItem value = {1}> C#</MenuItem>
+                        <MenuItem value = {2}> D</MenuItem>
+                        <MenuItem value = {3}> D#</MenuItem>
+                        <MenuItem value = {4}> E</MenuItem>
+                        <MenuItem value = {5}> F</MenuItem>
+                        <MenuItem value = {6}> F#</MenuItem>
+                        <MenuItem value = {7}> G</MenuItem>
+                        <MenuItem value = {8}> G#</MenuItem>
+                        <MenuItem value = {9}> A</MenuItem>
+                        <MenuItem value = {10}> A#</MenuItem>
+                        <MenuItem value = {11}> B</MenuItem>
+
+                    </Select>
+                </FormControl>
+                </Box>
+                
                
                 </Box>
                 <Box display= 'flex' flexDirection = 'column'>
-                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Maximum  </Typography>
-                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+                <Typography  width = {80} fontSize = {25} variant = 'h1' color = 'primary.main'> Maximum  </Typography>
+                <Box marginTop = {2} >
+                <FormControl fullWidth>
+                <InputLabel> Key </InputLabel>
+                    <Select onChange = {keyChange} value = {key[1] === -1 ? '': key[1]} name = 'maximum' label = 'Key'>
+                        
+                        <MenuItem value = {0}> C</MenuItem>
+                        <MenuItem value = {1}> C#</MenuItem>
+                        <MenuItem value = {2}> D</MenuItem>
+                        <MenuItem value = {3}> D#</MenuItem>
+                        <MenuItem value = {4}> E</MenuItem>
+                        <MenuItem value = {5}> F</MenuItem>
+                        <MenuItem value = {6}> F#</MenuItem>
+                        <MenuItem value = {7}> G</MenuItem>
+                        <MenuItem value = {8}> G#</MenuItem>
+                        <MenuItem value = {9}> A</MenuItem>
+                        <MenuItem value = {10}> A#</MenuItem>
+                        <MenuItem value = {11}> B</MenuItem>
+
+                    </Select>
+                </FormControl>
+                </Box>
+               
                 </Box>
                 <Box display= 'flex' flexDirection = 'column'>
-                <Typography  fontSize = {25} variant = 'h1' color = 'primary.main'> Target  </Typography>  
-                <TextField  label = 'Key' variant = 'standard' type = 'number'/>
+                <Typography  width = {80} fontSize = {25} variant = 'h1' color = 'primary.main'> Target  </Typography>  
+                <Box  marginTop = {2}>
+                <FormControl fullWidth>
+                <InputLabel> Key </InputLabel>
+                    <Select error = {isKeyFaulty(key[0], key[1], key[2])} onChange = {(e) => keyChange(e)} value = {key[2] === -1 ? '' : key[2]} name = 'target' label = 'Key'>
+                       
+                        <MenuItem value = {0}> C</MenuItem>
+                        <MenuItem value = {1}> C#</MenuItem>
+                        <MenuItem value = {2}> D</MenuItem>
+                        <MenuItem value = {3}> D#</MenuItem>
+                        <MenuItem value = {4}> E</MenuItem>
+                        <MenuItem value = {5}> F</MenuItem>
+                        <MenuItem value = {6}> F#</MenuItem>
+                        <MenuItem value = {7}> G</MenuItem>
+                        <MenuItem value = {8}> G#</MenuItem>
+                        <MenuItem value = {9}> A</MenuItem>
+                        <MenuItem value = {10}> A#</MenuItem>
+                        <MenuItem value = {11}> B</MenuItem>
+                    </Select>
+                </FormControl>
+                </Box>
+              
                 </Box>
                 </Box>
                 </Box>
 
 
+
+                <Box>
                 
+                    <Button onClick = {getTracks}> Generate your Tracks </Button>
+                </Box>
+          
+
             </Box>
-
-         
-           
-
 
 
 
