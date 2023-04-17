@@ -3,17 +3,23 @@ import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+
 interface Props{
     quality: string;
     start: number;
     end: number;
     separation: number;
     description : string;
+    rangeCallback: (data:any) => void;
+    targetCallback: (data:any) => void;
 }
 
 
-const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, description}:Props) =>{
+const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, description, rangeCallback, targetCallback}:Props) =>{
+
+
+    
 
     const [value, setValue] = useState<number[]>([start, end]);
 
@@ -23,9 +29,14 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
         }
         if(activeThumb === 0)
         {
+     
+            let temp_val = [Math.min(newValue[0], value[1] - separation), value[1]]
+            rangeCallback(temp_val);
             setValue([Math.min(newValue[0], value[1] - separation), value[1]]);
         }
         else{
+            let temp_val = [value[0], Math.max(newValue[1], value[0] + separation)]
+            rangeCallback(temp_val);
             setValue([value[0], Math.max(newValue[1], value[0] + separation)]);
         }
         console.log(value);
@@ -37,6 +48,13 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
     const targetbox = (e:any) =>{
         setTargetValue(e.target.value);
         console.log(targetValue)
+    }
+
+
+    const fireBoth = (e:any) =>{
+        let temp_target = parseInt(e.target.value);
+        targetCallback(temp_target);
+        setTargetValue(temp_target);
     }
 
     return(
@@ -54,7 +72,7 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
                 <Box width = {170} height = {100} marginTop = {4} display = 'flex' flexDirection = 'column' justifyContent='space-between'>  
                 <Typography fontSize = {25} variant = 'h1' color = 'primary.main'> Target ({start} - {end}) </Typography>
                 <TextField type = 'number' error = {targetValue < start || targetValue > end || targetValue < value[0] || targetValue > value[1]} 
-                variant = 'standard' label = 'Target' onChange = {targetbox}/>  
+                variant = 'standard' label = 'Target' onChange = {(e) => fireBoth(e)} />  
                 </Box>
                 </Box>
 

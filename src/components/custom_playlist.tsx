@@ -40,20 +40,20 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     const [recObject, setRecObject] = useState<RecommendationsObject>()
     const [recSeeds, setRecSeeds] = useState<RecommendationsSeedObject>()
     const [recTracks, setRecTracks] = useState<RecommendationTrackObject>()
-    const [acousticness, setAcousticness] = useState<number[]>();
-    const [danceability, setDanceability] = useState<number[]>();
-    const [energy, setEnergy] = useState<number[]>();
-    const [instrumentalness, setInstrumentalness] = useState<number[]>();
-    const [loudness, setLoudness] = useState<number[]>();
-    const [liveness, setLiveness] = useState<number[]>();
-    const [popularity, setPopularity] =  useState<number[]>();
-    const [speechiness, setSpeechiness] = useState<number[]>();
-    const [tempo, setTempo] = useState<number[]>();
-    const [timeSignature, setTimeSignature] = useState<number[]>();
-    const [valence, setValence] = useState<number[]>();
+    const [acousticness, setAcousticness] = useState<number[]>([0,0,0]);
+    const [danceability, setDanceability] = useState<number[]>([0,0,0]);
+    const [energy, setEnergy] = useState<number[]>([0,0,0]);
+    const [instrumentalness, setInstrumentalness] = useState<number[]>([0,0,0]);
+    const [loudness, setLoudness] = useState<number[]>([0,0,0]);
+    const [liveness, setLiveness] = useState<number[]>([0,0,0]);
+    const [popularity, setPopularity] =  useState<number[]>([0,0,0]);
+    const [speechiness, setSpeechiness] = useState<number[]>([0,0,0]);
+    const [tempo, setTempo] = useState<number[]>([0,0,0]);
+    const [timeSignature, setTimeSignature] = useState<number[]>([0,0,0]);
+    const [valence, setValence] = useState<number[]>([0,0,0]);
 
 
-    
+
     const change_seed_type = (e:any, index:number) =>{
         let temp_arr = [...user_seed_type] 
         temp_arr.splice(index, 1, e.target.value)
@@ -146,9 +146,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
             let min = toMilliseconds(e.target.value, 'minutes')
             let temp_arr = minuteDuration;
             temp_arr[0] = min;
-            console.log(`this is the first temp_arr ${temp_arr}`)
             setMinuteDuration(temp_arr);
-
         }
         else if(name === 'minimumseconds'){
             let min = toMilliseconds(e.target.value, 'seconds');
@@ -183,14 +181,12 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
             temp_arr[2] = target;
             setSecondDuration(temp_arr);
         }
-       
+
     }
 
    const keyChange = (e: any) =>{
        let {name} = e.target;
-       console.log(`this is the name ${name}`);
        let temp_arr = [...key];
-       console.log(`this is the arr before ${temp_arr}`)
         if(name === 'minimum')
         { 
             temp_arr[0] = e.target.value;
@@ -261,9 +257,39 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
        
    }
 
-   const slider_callback = (childData) =>{
+    const targetAcousticCallback = (childData:any) =>{
+       let temp_arr = [...acousticness];
+       temp_arr[2] = childData;
+       setAcousticness(temp_arr);
+       console.log(`this is the acouticness ${acousticness}`);
+       
+    }
 
-   }
+    const rangeAcousticCallback = (childData:any) =>{
+        let temp_arr = [...acousticness];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setAcousticness(temp_arr);
+        console.log(`this is the acousticness ${acousticness}`)
+    }   
+    
+    const targetDanceabilityCallback = (childData:any) => {
+       let temp_arr = [...danceability];
+       temp_arr[2] = childData;
+       setDanceability(temp_arr)
+       console.log(`this is the danceabioit ${danceability}`)
+    }
+
+    const rangeDanceabilityCallback = (childData:any) =>{
+        let temp_arr = [...danceability];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setDanceability(temp_arr);
+        console.log(`this is the dancebaility ${danceability}`);
+        
+    }
+
+  
    
 
 
@@ -306,11 +332,11 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                 </Box>
 
-                <Quality_Slider quality = 'Acousticness' start = {0} end = {100}  separation = {10}
+                <Quality_Slider targetCallback = {targetAcousticCallback} rangeCallback = {rangeAcousticCallback} quality = 'Acousticness' start = {0} end = {100}  separation = {10}
                 description = 'The acoustic nature of the track. Zero is mostly electronic and synthesized,
                  one hundred is mostly acoustic components.'
                 /> 
-                <Quality_Slider quality = 'Danceabilitiy' start = {0} end = {100}  separation = {10}
+                <Quality_Slider targetCallback = {targetDanceabilityCallback} rangeCallback = {rangeDanceabilityCallback} quality = 'Danceabilitiy' start = {0} end = {100}  separation = {10}
                 description = 'How suitable a track is for dancing, calculated using tempo, rhythm stability, beath strength, 
                 and overall regularity. Zero is not suitable, one hundred is suitable.'
                 />
