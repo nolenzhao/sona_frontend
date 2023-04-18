@@ -11,7 +11,7 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Slider from '@mui/material/Slider';
 import { border, MUIStyledCommonProps } from '@mui/system'
-import { RecommendationsSeedObject, RecommendationsObject, RecommendationTrackObject} from 'spotify-api'
+import { RecommendationsSeedObject, RecommendationsObject, RecommendationTrackObject, SearchForItemParameterObject} from 'spotify-api'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField';
@@ -33,6 +33,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     
     const [user_seed_type, set_user_seed_type] = useState<string[]>(['', '', '', '', '']);
     const [user_seed, set_user_seed] = useState<string[]>(['', '', '', '', ''])
+    const [spotify_ids, set_spotify_ids] = useState<string[]>(['', '', '', '', '']);
     const [mode, setMode] = useState<string>('');
     const [secondDuration, setSecondDuration] = useState<number[]>([0,0,0])
     const [minuteDuration, setMinuteDuration] = useState<number[]>([-1,-1,-1]);
@@ -64,7 +65,6 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         let temp_arr = [...user_seed];
         temp_arr.splice(index, 1, e.target.value)
         set_user_seed(temp_arr);
-        console.log(user_seed);
     }
     let seed_inputs = [];
 
@@ -113,7 +113,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         .then(raw => raw.json())
         .then(data =>{
             set_seed_genres(data.genres)
-            console.log(data.genres);
+         
         })
     },[accesstoken])
 
@@ -273,14 +273,14 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         console.log(`this is the acousticness ${acousticness}`)
     }   
     
-    const targetDanceabilityCallback = (childData:any) => {
+    const targetDanceabilityCallback = (childData:number) => {
        let temp_arr = [...danceability];
        temp_arr[2] = childData;
        setDanceability(temp_arr)
        console.log(`this is the danceabioit ${danceability}`)
     }
 
-    const rangeDanceabilityCallback = (childData:any) =>{
+    const rangeDanceabilityCallback = (childData:number[]) =>{
         let temp_arr = [...danceability];
         temp_arr[0] = childData[0];
         temp_arr[1] = childData[1];
@@ -289,8 +289,198 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         
     }
 
+    const targetEnergy = (childData:number) =>{
+        let temp_arr = [...energy];
+        temp_arr[2] = childData;
+        setEnergy(temp_arr);
+        console.log(`this is the energy ${energy}`)
+    }
+
+    const rangeEnergy = (childData:number[]) =>{
+        let temp_arr = [...energy];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setEnergy(temp_arr);
+    }
+
+    const targetInstrumentalness = (childData:number) =>{
+        let temp_arr = [...instrumentalness];
+        temp_arr[2] = childData;
+        setInstrumentalness(temp_arr);
+    }
+
+    const rangeInstrumentalness = (childData:number[]) =>{
+        let temp_arr = [...instrumentalness];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setInstrumentalness(temp_arr);
+    }
+
+    const targetLiveness = (childData:number) =>{
+        let temp_arr = [...liveness];
+        temp_arr[2] = childData;
+        setLiveness(temp_arr);
+    }
+
+    const rangeLiveness = (childData:number[]) =>{
+        let temp_arr = [...liveness];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setLiveness(temp_arr);
+    }
+
+    const targetLoudness = (childData:number) =>{
+        let temp_arr = [...loudness];
+        temp_arr[2] = childData;
+        setLoudness(temp_arr);
+    }
+
+    const rangeLoudness = (childData:number[]) =>{
+        let temp_arr = [...loudness];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setLoudness(temp_arr);
+    }
+
+    const targetPopularity = (childData:number) =>{
+        let temp_arr = [...popularity];
+        temp_arr[2] = childData;
+        setPopularity(temp_arr);
+    }
+
+    const rangePopularity = (childData:number[]) =>{
+        let temp_arr = [...popularity];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setPopularity(temp_arr);
+    }
+
+    const targetSpeechiness = (childData:number) =>{
+        let temp_arr = [...speechiness];
+        temp_arr[2] = childData;
+        setSpeechiness(temp_arr);
+    }
+
+    const rangeSpeechiness = (childData:number[]) =>{
+        let temp_arr = [...speechiness];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setSpeechiness(temp_arr);
+    }
+
+    const targetTempo = (childData:number) =>{
+        let temp_arr = [...tempo];
+        temp_arr[2] = childData;
+        setTempo(temp_arr);
+    }
+
+    const rangeTempo = (childData:number[]) => {
+        let temp_arr = [...tempo];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setTempo(temp_arr);
+    }
+
+    const targetTimeSignature = (childData:number) =>{
+        let temp_arr = [...timeSignature];
+        temp_arr[2] = childData;
+        setTimeSignature(temp_arr);
+    }
+
+    const rangeTimeSignature = (childData:number[]) =>{
+        let temp_arr = [...timeSignature];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setTimeSignature(temp_arr);
+    }
+
+    const targetValence = (childData:number) =>{
+        let temp_arr = [...valence];
+        temp_arr[2] = childData;
+        setValence(temp_arr);
+    }
   
+    const rangeValence = (childData:number[]) =>{
+        let temp_arr = [...valence];
+        temp_arr[0] = childData[0];
+        temp_arr[1] = childData[1];
+        setValence(temp_arr);
+    }
    
+    useEffect(() =>{
+        for(let i = 0; i < user_seed.length; i++)
+        {
+            if(user_seed[i] === '')
+            {
+
+            }
+            else{
+                if(user_seed_type[i] === 'Artist' || user_seed_type[i] === 'Track')
+                {
+                    let query:string = user_seed[i].replace(' ', '+');
+                    if(user_seed_type[i] === 'Artist')
+                    {
+                  
+                       
+                        fetch(`https://api.spotify.com/v1/search?q=${query}&type=${user_seed_type[i].toLowerCase()}&limit=1`, {
+                            method: 'GET',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${accesstoken}`
+                            }
+                        })
+                        .then(raw => raw.json())
+                        .then(data =>{
+                            let temp_arr = [...spotify_ids];
+                            temp_arr[i] = data.artists.items[0].id;
+                            console.log(temp_arr);
+                            set_spotify_ids(temp_arr);
+                        })
+                    }
+                    else{
+                        // console.log(accesstoken);
+                        fetch(`https://api.spotify.com/v1/search?q=${query}&type=${user_seed_type[i].toLowerCase()}&limit=1`, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accesstoken}`
+                        }
+                    })
+                    .then(raw => raw.json())
+                    .then(data =>{
+                        let temp_arr = [...spotify_ids];
+                        temp_arr[i] = data.tracks.items[0].id;
+                        console.log(temp_arr);
+                        set_spotify_ids(temp_arr);
+                      
+                    })
+                    }    
+                }
+                else{
+                    
+                }
+            }    
+        }
+    }, [user_seed])
+
+
+
+    const searchExample = () =>{
+        fetch('https://api.spotify.com/v1/search?q=taylorswift&type=artist&limit=1', {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accesstoken}`
+            }   
+        })
+        .then(raw => raw.json())
+        .then(data => {
+            console.log(data.artists.items[0].id);
+        })
+    }
 
 
     return(
@@ -340,39 +530,39 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 description = 'How suitable a track is for dancing, calculated using tempo, rhythm stability, beath strength, 
                 and overall regularity. Zero is not suitable, one hundred is suitable.'
                 />
-                <Quality_Slider quality = 'Energy' start = {0} end = {100}  separation = {10}
+                <Quality_Slider targetCallback = {targetEnergy} rangeCallback = {rangeEnergy} quality = 'Energy' start = {0} end = {100}  separation = {10}
                 description = 'The intensity and activity level of the track, calculated using loudness, dynamic range, 
                 and tempo. Zero is quiet and calm, one hundred is loud and energetic.'
                 />
-                <Quality_Slider quality = 'Instrumentalness' start = {0} end = {100}  separation = {10}
+                <Quality_Slider targetCallback = {targetInstrumentalness}  rangeCallback = {rangeInstrumentalness} quality = 'Instrumentalness' start = {0} end = {100}  separation = {10}
                 description = 'The degree to which vocals or singing is present, calculated using presence or absence of vocals, 
                 melodic content, and lyrics. Zero is full of singing, one hundred is mostly instruments.'
                 />
-                <Quality_Slider quality = 'Liveness' start = {0} end = {100} separation = {10}
+                <Quality_Slider targetCallback = {targetLiveness} rangeCallback = {rangeLiveness} quality = 'Liveness' start = {0} end = {100} separation = {10}
                 description = 'The presence of a live audience in a recording, calculated using crowd noise, applauce, 
                 and other indicators. Zero is a studio, one hundred is live.'
                 />
-                <Quality_Slider quality = "Loudness (dB)" start = {-60} end = {0}  separation = {5}
+                <Quality_Slider targetCallback = {targetLoudness} rangeCallback = {rangeLoudness} quality = "Loudness (dB)" start = {-60} end = {0}  separation = {5}
                 description = 'Uses decibels to measure the loudness of a track. Negative sixty is silent, 
                 zero is deafening.'
                 />
-                <Quality_Slider quality = 'Popularity' start = {0} end = {100} separation = {10}
+                <Quality_Slider targetCallback = {targetPopularity} rangeCallback = {rangePopularity} quality = 'Popularity' start = {0} end = {100} separation = {10}
                 description = 'How popular a track is, calculated based on total number of plays and how recent those plays are. 
                 Takes into account user behavior and demographics. Zero is never played, one hundred is very popular.'
                 />
-                <Quality_Slider quality = 'Speechiness' start = {0} end = {100}  separation = {10}
+                <Quality_Slider targetCallback = {targetSpeechiness} rangeCallback = {rangeSpeechiness} quality = 'Speechiness' start = {0} end = {100}  separation = {10}
                 description = 'The presence of spoken words, calculated by analyzing the high-frequency content and spectral
                 values of the track. Zero is mostly music, one hundred is mostly speaking.'
                 />
-                <Quality_Slider quality = 'Tempo (BPM)' start = {0} end = {250} separation = {10}
+                <Quality_Slider targetCallback = {targetTempo} rangeCallback = {rangeTempo}s quality = 'Tempo (BPM)' start = {0} end = {250} separation = {10}
                 description = 'How many beats per minute (BPM) the track has. A higher tempo is faster, a lower tempo is 
                 slower, calculated using the time between beats. Zero is a snails pace, one hundred is racing.'
                 />
-                <Quality_Slider quality = 'Time Signature' start = {0} end = {11} separation = {1}
+                <Quality_Slider targetCallback = {targetTimeSignature} rangeCallback = {rangeTimeSignature} quality = 'Time Signature' start = {0} end = {11} separation = {1}
                 description = 'The number of beats per bar of a track, as well as the types (ie. eighth, quarter, whole). One is 
                 one beat per bar, eleven will have eleven beats per bar.'
                 />
-                <Quality_Slider quality = 'Valence' start = {0} end = {100} separation = {10}
+                <Quality_Slider targetCallback={targetValence} rangeCallback = {rangeValence} quality = 'Valence' start = {0} end = {100} separation = {10}
                 description = 'How positive a track is, calculated by harmoniousness, tonality, and brightness. A value of zero 
                 is sad and angry, a value of one hundred is euphoric and cheerful.'
                 /> 
@@ -510,6 +700,10 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <Box>
                 
                     <Button onClick = {getTracks}> Generate your Tracks </Button>
+                </Box>
+
+                <Box>
+                    <Button onClick = {searchExample}> Search for tswift</Button>
                 </Box>
           
 
