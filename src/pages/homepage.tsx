@@ -16,6 +16,7 @@ import {Album} from '../types/top_items.d'
 import { DataArray } from '@mui/icons-material';
 import Top_Items from '../components/top_items'
 import Custom_Playlist from '../components/custom_playlist';
+import Track_Display from '../components/track_display';
 /*
 const Page: NextPageWithLayout = () => {
   return <p>hello world</p>
@@ -94,8 +95,10 @@ const Homepage:MyPage = () =>{
 
         <Custom_Playlist accesstoken = {accesstoken}/>
  
-  
-  
+         </Box>
+
+         <Box>
+           <Track_Display/>
          </Box>
 
   

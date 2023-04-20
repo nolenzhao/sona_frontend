@@ -30,12 +30,12 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
         if(activeThumb === 0)
         {
      
-            let temp_val = [Math.min(newValue[0], value[1] - separation), value[1]]
+            let temp_val = [Math.min(newValue[0], value[1] - separation)/100, value[1]/100]
             rangeCallback(temp_val);
             setValue([Math.min(newValue[0], value[1] - separation), value[1]]);
         }
         else{
-            let temp_val = [value[0], Math.max(newValue[1], value[0] + separation)]
+            let temp_val = [value[0]/100, Math.max(newValue[1], value[0] + separation)/100]
             rangeCallback(temp_val);
             setValue([value[0], Math.max(newValue[1], value[0] + separation)]);
         }
@@ -52,7 +52,7 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
 
 
     const fireBoth = (e:any) =>{
-        let temp_target = parseInt(e.target.value);
+        let temp_target = parseInt(e.target.value)/100;
         targetCallback(temp_target);
         setTargetValue(temp_target);
     }
@@ -71,7 +71,7 @@ const Quality_Slider:React.FC<Props> = ({quality, start, end, separation, descri
                 
                 <Box width = {170} height = {100} marginTop = {4} display = 'flex' flexDirection = 'column' justifyContent='space-between'>  
                 <Typography fontSize = {25} variant = 'h1' color = 'primary.main'> Target ({start} - {end}) </Typography>
-                <TextField type = 'number' error = {targetValue < start || targetValue > end || targetValue < value[0] || targetValue > value[1]} 
+                <TextField type = 'number' error = {targetValue < start/100 || targetValue > end/100 || targetValue < value[0]/100 || targetValue > value[1]/100} 
                 variant = 'standard' label = 'Target' onChange = {(e) => fireBoth(e)} />  
                 </Box>
                 </Box>

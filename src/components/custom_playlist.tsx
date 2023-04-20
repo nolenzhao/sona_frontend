@@ -24,6 +24,7 @@ import Button from '@mui/material/Button'
 import styles from '../styles/custom_playlist.module.scss'
 import Quality_Slider from './quality_slider'
 import { ElectricScooterSharp } from '@mui/icons-material'
+import { SemanticClassificationFormat } from 'typescript'
 
 interface Props{
     accesstoken: string | null;
@@ -38,21 +39,22 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     const [mode, setMode] = useState<string>('');
     const [secondDuration, setSecondDuration] = useState<number[]>([0,60,-1])
     const [minuteDuration, setMinuteDuration] = useState<number[]>([0,10,-1]);
-    const [key, setKey] = useState<number[]>([0,1,-1]);
+    const [key, setKey] = useState<number[]>([-1,-1,-1]);
     const [recObject, setRecObject] = useState<RecommendationsObject>()
-    const [recSeeds, setRecSeeds] = useState<RecommendationsSeedObject>()
-    const [recTracks, setRecTracks] = useState<RecommendationTrackObject>()
-    const [acousticness, setAcousticness] = useState<number[]>([0,100,-1]);
-    const [danceability, setDanceability] = useState<number[]>([0,100,-1]);
-    const [energy, setEnergy] = useState<number[]>([0,100,-1]);
-    const [instrumentalness, setInstrumentalness] = useState<number[]>([0,100,-1]);
-    const [loudness, setLoudness] = useState<number[]>([0,100,-1]);
-    const [liveness, setLiveness] = useState<number[]>([0,100,-1]);
-    const [popularity, setPopularity] =  useState<number[]>([0,100,-1]);
-    const [speechiness, setSpeechiness] = useState<number[]>([0,100,-1]);
-    const [tempo, setTempo] = useState<number[]>([0,100,-1]);
-    const [timeSignature, setTimeSignature] = useState<number[]>([0,100,-1]);
-    const [valence, setValence] = useState<number[]>([0,100,-1]);
+    const [recSeeds, setRecSeeds] = useState<RecommendationsSeedObject[]>([])
+    const [recTracks, setRecTracks] = useState<RecommendationTrackObject[]>([])
+    const [acousticness, setAcousticness] = useState<number[]>([0,1,-1]);
+    const [danceability, setDanceability] = useState<number[]>([0,1,-1]);
+    const [energy, setEnergy] = useState<number[]>([0,1,-1]);
+    const [instrumentalness, setInstrumentalness] = useState<number[]>([0,1,-1]);
+    const [loudness, setLoudness] = useState<number[]>([-60,0,-1]);
+    const [liveness, setLiveness] = useState<number[]>([0,1,-1]);
+    const [popularity, setPopularity] =  useState<number[]>([0,1,-1]);
+    const [speechiness, setSpeechiness] = useState<number[]>([0,1,-1]);
+    const [tempo, setTempo] = useState<number[]>([0,250,-1]);
+    const [timeSignature, setTimeSignature] = useState<number[]>([0,11,-1]);
+    const [valence, setValence] = useState<number[]>([0,1,-1]);
+    const [limit, setLimit] = useState<number>(20);
 
 
 
@@ -203,7 +205,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         setKey(temp_arr);
    }
 
-
+   
     
    const getTracks = () =>{
         let pure_seeds_artists:string[] = [];
@@ -221,7 +223,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                     pure_seeds_tracks.push(spotify_ids[i])
                 }
                 else{
-                    pure_seeds_genres.push(user_seed[i])
+                    pure_seeds_genres.push(user_seed[i].toLowerCase())
                 }
             }
         }
@@ -239,49 +241,10 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
 
         
         let recObj: RecommendationsOptionsObject = {
-            limit: 20,
+            limit: limit,
             seed_artists: pure_seeds_artists,
             seed_tracks: pure_seeds_tracks,
             seed_genres: pure_seeds_genres,
-            min_acousticness: acousticness[0],
-            max_acousticness: acousticness[1],
-            target_acousticness: acousticness[2],
-            min_danceability: danceability[0],
-            max_danceability: danceability[1],
-            target_danceability: danceability[2],
-            min_energy: energy[0],
-            max_energy: energy[1],
-            target_energy: energy[2],
-            min_instrumentalness: instrumentalness[0],
-            max_instrumentalness: instrumentalness[1],
-            target_instrumentalness: instrumentalness[2],
-            min_liveness: liveness[0],
-            max_liveness: liveness[1],
-            target_liveness: liveness[2],
-            min_loudness: loudness[0],
-            max_loudness: loudness[1],
-            target_loudness: loudness[2],
-            min_popularity: popularity[0],
-            max_popularity: popularity[1],
-            target_popularity: popularity[2],
-            min_speechiness: speechiness[0],
-            max_speechiness: speechiness[1],
-            target_speechiness: speechiness[2],
-            min_tempo: tempo[0],
-            max_tempo: tempo[1],
-            target_tempo: tempo[2],
-            min_time_signature: timeSignature[0],
-            max_time_signature: timeSignature[1],
-            target_time_signature: timeSignature[2],
-            min_valence: speechiness[0],
-            max_valence: speechiness[1],
-            target_valence: speechiness[2],
-            min_duration_ms: minuteDuration[0] + secondDuration[0],
-            max_duration_ms: minuteDuration[1] + secondDuration[1],
-            target_duration_ms: minuteDuration[2] + secondDuration[2],
-            min_key: key[0],
-            max_key: key[1],
-            target_key: key[2],
             min_mode: temp_mode[0],
             max_mode: temp_mode[1],
             target_mode: temp_mode[0],
@@ -324,9 +287,9 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         }
         if(popularity[2] !== -1)
         {
-            recObj.min_loudness = loudness[0];
-            recObj.max_loudness = loudness[1];
-            recObj.target_loudness = loudness[2];
+            recObj.min_popularity = popularity[0];
+            recObj.max_popularity= popularity[1];
+            recObj.target_popularity = popularity[2];
         }
         if(speechiness[2] !== -1)
         {
@@ -389,7 +352,11 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
    }
 
    const isKeyFaulty = (min:number, max:number, target:number) =>{
-        if(min < max){
+       if(target === -1)
+       {
+
+       }
+        else if(min < max){
             if(target > max || target < min)
             {
                 return true;
@@ -419,6 +386,11 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
        
    }
 
+   const changeLimit = (e:any) =>{
+        setLimit(e.target.value);
+        console.log(limit);
+        
+   }
     const targetAcousticCallback = (childData:any) =>{
        let temp_arr = [...acousticness];
        temp_arr[2] = childData;
@@ -437,15 +409,15 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     
     const targetDanceabilityCallback = (childData:number) => {
        let temp_arr = [...danceability];
-       temp_arr[2] = childData;
+       temp_arr[2] = childData
        setDanceability(temp_arr)
        console.log(`this is the danceabioit ${danceability}`)
     }
 
     const rangeDanceabilityCallback = (childData:number[]) =>{
         let temp_arr = [...danceability];
-        temp_arr[0] = childData[0];
-        temp_arr[1] = childData[1];
+        temp_arr[0] = childData[0]
+        temp_arr[1] = childData[1]
         setDanceability(temp_arr);
         console.log(`this is the dancebaility ${danceability}`);
         
@@ -453,47 +425,47 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
 
     const targetEnergy = (childData:number) =>{
         let temp_arr = [...energy];
-        temp_arr[2] = childData;
+        temp_arr[2] = childData
         setEnergy(temp_arr);
         console.log(`this is the energy ${energy}`)
     }
 
     const rangeEnergy = (childData:number[]) =>{
         let temp_arr = [...energy];
-        temp_arr[0] = childData[0];
-        temp_arr[1] = childData[1];
+        temp_arr[0] = childData[0]
+        temp_arr[1] = childData[1]
         setEnergy(temp_arr);
     }
 
     const targetInstrumentalness = (childData:number) =>{
         let temp_arr = [...instrumentalness];
-        temp_arr[2] = childData;
+        temp_arr[2] = childData
         setInstrumentalness(temp_arr);
     }
 
     const rangeInstrumentalness = (childData:number[]) =>{
         let temp_arr = [...instrumentalness];
-        temp_arr[0] = childData[0];
-        temp_arr[1] = childData[1];
+        temp_arr[0] = childData[0]
+        temp_arr[1] = childData[1]
         setInstrumentalness(temp_arr);
     }
 
     const targetLiveness = (childData:number) =>{
         let temp_arr = [...liveness];
-        temp_arr[2] = childData;
+        temp_arr[2] = childData
         setLiveness(temp_arr);
     }
 
     const rangeLiveness = (childData:number[]) =>{
         let temp_arr = [...liveness];
-        temp_arr[0] = childData[0];
-        temp_arr[1] = childData[1];
+        temp_arr[0] = childData[0]
+        temp_arr[1] = childData[1]
         setLiveness(temp_arr);
     }
 
     const targetLoudness = (childData:number) =>{
         let temp_arr = [...loudness];
-        temp_arr[2] = childData;
+        temp_arr[2] = childData
         setLoudness(temp_arr);
     }
 
@@ -743,7 +715,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                 </Box>
 
-                heres the token {accesstoken}
+              
                 </Box>
                 <Box  width = {900} marginTop = {10}>
                 <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Duration</em>  </Typography>
@@ -786,6 +758,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <FormControl fullWidth>
                 <InputLabel> Key </InputLabel>
                     <Select onChange = {keyChange} value = {key[0] === -1 ? '' : key[0]} name = 'minimum' label = 'Key'>
+                        
                         <MenuItem value = {0}> C</MenuItem>
                         <MenuItem value = {1}> C#</MenuItem>
                         <MenuItem value = {2}> D</MenuItem>
@@ -836,7 +809,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 <FormControl fullWidth>
                 <InputLabel> Key </InputLabel>
                     <Select error = {isKeyFaulty(key[0], key[1], key[2])} onChange = {(e) => keyChange(e)} value = {key[2] === -1 ? '' : key[2]} name = 'target' label = 'Key'>
-                       
+                        <MenuItem value  = {-1}> None </MenuItem>
                         <MenuItem value = {0}> C</MenuItem>
                         <MenuItem value = {1}> C#</MenuItem>
                         <MenuItem value = {2}> D</MenuItem>
@@ -857,16 +830,27 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 </Box>
                 </Box>
 
-
-
-                <Box>
+                <Box  width = {500} marginTop = {10}>
+                <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Number of Tracks</em>  </Typography>
+                <Typography sx = {{width: 900}} variant = 'subtitle1' fontSize = {17}> Fewer songs may be returned
+                if not enough tracks are available according to the preferences set. Default set to twenty. </Typography>
+                <Box width = {700} display = 'flex' flexDirection = 'row' justifyContent = 'space-between'>
+                <Box  width = {180} height ={100} display = 'flex' flexDirection='column' justifyContent='space-between' marginTop = {4}>
+                <TextField error = {limit > 50} onChange = {(e) => changeLimit(e)} label = 'Number of Tracks' type = 'number' />
+                </Box>
                 
-                    <Button onClick = {getTracks}> Generate your Tracks </Button>
+                </Box>
+
+              
+                </Box>
+
+
+                <Box marginTop = {10} display = 'flex' justifyContent= 'center'>
+                
+                    <Button  variant = 'contained' disableElevation size = 'large' onClick = {getTracks} sx = {{fontSize: 25, width: 280, height: 100}} > Generate your Tracks </Button>
                 </Box>
                         
-                <Box>
-                    <Button onClick = {searchExample}> Search for tswift</Button>
-                </Box>
+                
           
 
             </Box>
