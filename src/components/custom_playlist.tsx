@@ -8,10 +8,11 @@ import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
+const querystring = require('querystring');
 import MenuItem from '@mui/material/MenuItem'
 import Slider from '@mui/material/Slider';
 import { border, MUIStyledCommonProps } from '@mui/system'
-import { RecommendationsSeedObject, RecommendationsObject, RecommendationTrackObject, SearchForItemParameterObject} from 'spotify-api'
+import { RecommendationsSeedObject, RecommendationsOptionsObject, RecommendationsObject, RecommendationTrackObject, SearchForItemParameterObject} from 'spotify-api'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField';
@@ -35,23 +36,23 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
     const [user_seed, set_user_seed] = useState<string[]>(['', '', '', '', ''])
     const [spotify_ids, set_spotify_ids] = useState<string[]>(['', '', '', '', '']);
     const [mode, setMode] = useState<string>('');
-    const [secondDuration, setSecondDuration] = useState<number[]>([0,0,0])
-    const [minuteDuration, setMinuteDuration] = useState<number[]>([-1,-1,-1]);
-    const [key, setKey] = useState<number[]>([-1,-1,-1]);
+    const [secondDuration, setSecondDuration] = useState<number[]>([0,60,-1])
+    const [minuteDuration, setMinuteDuration] = useState<number[]>([0,10,-1]);
+    const [key, setKey] = useState<number[]>([0,1,-1]);
     const [recObject, setRecObject] = useState<RecommendationsObject>()
     const [recSeeds, setRecSeeds] = useState<RecommendationsSeedObject>()
     const [recTracks, setRecTracks] = useState<RecommendationTrackObject>()
-    const [acousticness, setAcousticness] = useState<number[]>([0,0,0]);
-    const [danceability, setDanceability] = useState<number[]>([0,0,0]);
-    const [energy, setEnergy] = useState<number[]>([0,0,0]);
-    const [instrumentalness, setInstrumentalness] = useState<number[]>([0,0,0]);
-    const [loudness, setLoudness] = useState<number[]>([0,0,0]);
-    const [liveness, setLiveness] = useState<number[]>([0,0,0]);
-    const [popularity, setPopularity] =  useState<number[]>([0,0,0]);
-    const [speechiness, setSpeechiness] = useState<number[]>([0,0,0]);
-    const [tempo, setTempo] = useState<number[]>([0,0,0]);
-    const [timeSignature, setTimeSignature] = useState<number[]>([0,0,0]);
-    const [valence, setValence] = useState<number[]>([0,0,0]);
+    const [acousticness, setAcousticness] = useState<number[]>([0,100,-1]);
+    const [danceability, setDanceability] = useState<number[]>([0,100,-1]);
+    const [energy, setEnergy] = useState<number[]>([0,100,-1]);
+    const [instrumentalness, setInstrumentalness] = useState<number[]>([0,100,-1]);
+    const [loudness, setLoudness] = useState<number[]>([0,100,-1]);
+    const [liveness, setLiveness] = useState<number[]>([0,100,-1]);
+    const [popularity, setPopularity] =  useState<number[]>([0,100,-1]);
+    const [speechiness, setSpeechiness] = useState<number[]>([0,100,-1]);
+    const [tempo, setTempo] = useState<number[]>([0,100,-1]);
+    const [timeSignature, setTimeSignature] = useState<number[]>([0,100,-1]);
+    const [valence, setValence] = useState<number[]>([0,100,-1]);
 
 
 
@@ -140,6 +141,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         }
         
     }
+    
     const rangeDuration = (e:any) =>{
         let {name} = e.target;
         if(name === 'minimumminutes'){
@@ -194,22 +196,181 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
         else if(name === 'maximum')
         {
             temp_arr[1] = e.target.value;
-            console.log('max changed')
         }
         else{
             temp_arr[2] = e.target.value;
         }
         setKey(temp_arr);
-        console.log(`this is the arr after ${temp_arr}`)
-        console.log(`this is the key ${key}`)
    }
 
-   
 
-   
+    
    const getTracks = () =>{
+        let pure_seeds_artists:string[] = [];
+        let pure_seeds_tracks:string[] = [];
+        let pure_seeds_genres:string[] = [];
+        for(let i = 0; i < user_seed.length; i++)
+        {
+            if(user_seed_type[i] !== '')
+            {
+                if(user_seed_type[i] === 'Artist')
+                {
+                    pure_seeds_artists.push(spotify_ids[i])
+                }
+                else if(user_seed_type[i] === 'Track'){
+                    pure_seeds_tracks.push(spotify_ids[i])
+                }
+                else{
+                    pure_seeds_genres.push(user_seed[i])
+                }
+            }
+        }
+        let temp_mode:number[] = [-1,-1];
 
-       fetch('https://api.spotify.com/v1/recommendations' , {
+        if(mode === 'Major'){
+            temp_mode = [1,1];
+        }
+        else if(mode === 'Minor'){
+            temp_mode = [0,0];
+        }
+        else{
+            temp_mode = [0,1];
+        }
+
+        
+        let recObj: RecommendationsOptionsObject = {
+            limit: 20,
+            seed_artists: pure_seeds_artists,
+            seed_tracks: pure_seeds_tracks,
+            seed_genres: pure_seeds_genres,
+            min_acousticness: acousticness[0],
+            max_acousticness: acousticness[1],
+            target_acousticness: acousticness[2],
+            min_danceability: danceability[0],
+            max_danceability: danceability[1],
+            target_danceability: danceability[2],
+            min_energy: energy[0],
+            max_energy: energy[1],
+            target_energy: energy[2],
+            min_instrumentalness: instrumentalness[0],
+            max_instrumentalness: instrumentalness[1],
+            target_instrumentalness: instrumentalness[2],
+            min_liveness: liveness[0],
+            max_liveness: liveness[1],
+            target_liveness: liveness[2],
+            min_loudness: loudness[0],
+            max_loudness: loudness[1],
+            target_loudness: loudness[2],
+            min_popularity: popularity[0],
+            max_popularity: popularity[1],
+            target_popularity: popularity[2],
+            min_speechiness: speechiness[0],
+            max_speechiness: speechiness[1],
+            target_speechiness: speechiness[2],
+            min_tempo: tempo[0],
+            max_tempo: tempo[1],
+            target_tempo: tempo[2],
+            min_time_signature: timeSignature[0],
+            max_time_signature: timeSignature[1],
+            target_time_signature: timeSignature[2],
+            min_valence: speechiness[0],
+            max_valence: speechiness[1],
+            target_valence: speechiness[2],
+            min_duration_ms: minuteDuration[0] + secondDuration[0],
+            max_duration_ms: minuteDuration[1] + secondDuration[1],
+            target_duration_ms: minuteDuration[2] + secondDuration[2],
+            min_key: key[0],
+            max_key: key[1],
+            target_key: key[2],
+            min_mode: temp_mode[0],
+            max_mode: temp_mode[1],
+            target_mode: temp_mode[0],
+        }
+
+        if(acousticness[2] !== -1)
+        {
+            recObj.min_acousticness = acousticness[0];
+            recObj.max_acousticness = acousticness[1];
+            recObj.target_acousticness = acousticness[2];
+        }
+        if(danceability[2] !== -1)
+        {
+            recObj.min_danceability = danceability[0];
+            recObj.max_danceability = danceability[1];
+            recObj.target_danceability = danceability[2];
+        }
+        if(energy[2] !== -1)
+        {
+            recObj.min_energy = energy[0];
+            recObj.max_energy = energy[1];
+            recObj.target_energy = energy[2];
+        }
+        if(instrumentalness[2] !== -1)
+        {
+            recObj.min_instrumentalness = energy[0];
+            recObj.max_instrumentalness = energy[1];
+            recObj.target_instrumentalness = energy[2];
+        }
+        if(liveness[2] !== -1){
+            recObj.min_liveness = energy[0];
+            recObj.max_liveness = energy[1];
+            recObj.target_liveness = energy[2];
+        }
+        if(loudness[2] !== -1)
+        {
+            recObj.min_loudness= loudness[0];
+            recObj.max_loudness = loudness[1];
+            recObj.target_loudness = loudness[2];
+        }
+        if(popularity[2] !== -1)
+        {
+            recObj.min_loudness = loudness[0];
+            recObj.max_loudness = loudness[1];
+            recObj.target_loudness = loudness[2];
+        }
+        if(speechiness[2] !== -1)
+        {
+            recObj.min_speechiness = speechiness[0];
+            recObj.max_speechiness = speechiness[1];
+            recObj.target_speechiness = speechiness[2];
+        }
+        if(tempo[2] !== -1)
+        {
+            recObj.min_tempo = tempo[0];
+            recObj.max_tempo = tempo[1];
+            recObj.target_tempo = tempo[2];
+        }
+        if(timeSignature[2] !== -1)
+        {
+            recObj.min_time_signature = timeSignature[0];
+            recObj.max_time_signature = timeSignature[1];
+            recObj.target_time_signature = timeSignature[2];
+        }
+        if(valence[2] !== -1)
+        {
+            recObj.min_valence = valence[0];
+            recObj.max_valence = valence[1];
+            recObj.target_valence = valence[2];
+        }
+        if(minuteDuration[2] !== -1 && secondDuration[2] !== -1)
+        {
+            recObj.min_duration_ms = minuteDuration[0] + secondDuration[0];
+            recObj.max_duration_ms = minuteDuration[1] + secondDuration[1];
+            recObj.target_duration_ms = minuteDuration[2] + secondDuration[2]
+        }
+        if(key[2] !== -1)
+        {
+            recObj.min_key = key[0];
+            recObj.max_key = key[1];
+            recObj.target_key = key[2];
+        }
+        
+       
+        let querypt1:string = `https://api.spotify.com/v1/recommendations?`
+        let querypt2:string = new URLSearchParams(recObj).toString();
+      console.log(`fetching from ${querypt1 + querypt2}`);
+      
+       fetch(querypt1 + querypt2 , {
            method: 'GET',
            mode: 'cors',
            headers: {
@@ -220,6 +381,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
        })
        .then(raw => raw.json())
        .then(data => {
+           console.log(data);
             setRecObject(data);
             setRecSeeds(data.seeds)
             setRecTracks(data.tracks);
@@ -439,7 +601,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                         })
                     }
                     else{
-                        // console.log(accesstoken);
+           
                         fetch(`https://api.spotify.com/v1/search?q=${query}&type=${user_seed_type[i].toLowerCase()}&limit=1`, {
                         method: 'GET',
                         mode: 'cors',
@@ -581,7 +743,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                 </Box>
 
-                
+                heres the token {accesstoken}
                 </Box>
                 <Box  width = {900} marginTop = {10}>
                 <Typography fontSize = {30} variant = 'h1' color = 'primary.main'> <em> Duration</em>  </Typography>
@@ -701,7 +863,7 @@ const Custom_Playlist:React.FC<Props> = ({accesstoken}:Props) =>{
                 
                     <Button onClick = {getTracks}> Generate your Tracks </Button>
                 </Box>
-
+                        
                 <Box>
                     <Button onClick = {searchExample}> Search for tswift</Button>
                 </Box>
